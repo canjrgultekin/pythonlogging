@@ -1,0 +1,26 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+
+exporters:
+  logging:
+    loglevel: debug
+  kafka:
+    brokers: ["kafka:9092"]
+    topic: "otel-logs"
+    encoding: otlp_proto
+    protocol_version: 2.0
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [logging, kafka]
+    metrics:
+      receivers: [otlp]
+      exporters: [logging]
+    logs:
+      receivers: [otlp]
+      exporters: [logging, kafka]
